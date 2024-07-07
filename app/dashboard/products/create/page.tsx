@@ -1,5 +1,6 @@
 "use client"
 
+import { createProduct } from "@/actions"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -24,12 +25,31 @@ import { UploadButton, UploadDropzone } from "@/lib/uploadthing"
 import { cn } from "@/lib/utils"
 import { ChevronLeftIcon } from "lucide-react"
 import Link from "next/link"
+import { useFormState } from "react-dom"
+import { useForm } from "@conform-to/react"
+import { parseWithZod } from "@conform-to/zod"
+import { productSchema } from "@/zodSchema"
 
 interface CreateProps {}
 
 export default function ProductCreatePage({}: CreateProps) {
+  const [lastResult, action] = useFormState(createProduct, undefined)
+  const [form, fields] = useForm({
+    lastResult,
+
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: productSchema })
+    },
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+  })
   return (
-    <form className={cn("")}>
+    <form
+      id={form.id}
+      onSubmit={form.onSubmit}
+      action={action}
+      className={cn("")}
+    >
       <div className="flex items-center gap-4">
         <Button asChild variant="outline" size="icon">
           <Link href="/dashboard/products">
@@ -51,35 +71,73 @@ export default function ProductCreatePage({}: CreateProps) {
             <div className="flex flex-col gap-3">
               <Label htmlFor="name">Name</Label>
               <Input
+                key={fields.name.key}
+                name={fields.name.name}
+                defaultValue={fields.name.initialValue}
                 className="w-full"
                 id="name"
                 placeholder="Enter product name"
               />
+              <p className="text-xs text-red-600">{fields.name.errors}</p>
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="name">Description</Label>
               <Textarea
+                key={fields.description.key}
+                name={fields.description.name}
+                defaultValue={fields.description.initialValue}
                 className="w-full"
                 placeholder="Description of products"
               />
+              <p className="text-xs text-red-600">
+                {fields.description.errors}
+              </p>
             </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="price">Price</Label>
-              <Input
-                inputMode="numeric"
-                type="number"
-                className="w-full"
-                id="price"
-                placeholder="47 €"
-              />
+            <div className="flex w-full items-center gap-4">
+              <div className="flex flex-col gap-3 w-full">
+                <Label htmlFor="price">Price</Label>
+                <Input
+                  key={fields.price.key}
+                  name={fields.price.name}
+                  defaultValue={fields.price.initialValue}
+                  inputMode="numeric"
+                  type="number"
+                  className="w-full"
+                  id="price"
+                  placeholder="47 €"
+                />
+                <p className="text-xs text-red-600">{fields.price.errors}</p>
+              </div>
+              <div className="flex flex-col gap-3 w-full">
+                <Label htmlFor="net">Net</Label>
+                <Input
+                  key={fields.net.key}
+                  name={fields.net.name}
+                  defaultValue={fields.net.initialValue}
+                  type="text"
+                  className="w-full"
+                  id="net"
+                  placeholder="250 gr"
+                />
+                <p className="text-xs text-red-600">{fields.net.errors}</p>
+              </div>
             </div>
             <div className="flex flex-col gap-3">
               <Label>Featured Product</Label>
-              <Switch />
+              <Switch
+                key={fields.isFeatured.key}
+                name={fields.isFeatured.name}
+                defaultValue={fields.isFeatured.initialValue}
+              />
+              <p className="text-xs text-red-600">{fields.isFeatured.errors}</p>
             </div>
             <div className="flex flex-col gap-3">
               <Label>Status</Label>
-              <Select>
+              <Select
+                key={fields.status.key}
+                name={fields.status.name}
+                defaultValue={fields.status.initialValue}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Status" />
                 </SelectTrigger>
@@ -89,6 +147,7 @@ export default function ProductCreatePage({}: CreateProps) {
                   <SelectItem value="archived">Archived</SelectItem>
                 </SelectContent>
               </Select>
+              <p className="text-xs text-red-600">{fields.status.errors}</p>
             </div>
             <div className="flex flex-col gap-3">
               <Label>Images</Label>
