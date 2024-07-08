@@ -1,6 +1,6 @@
 "use client"
 
-import { createProduct } from "@/actions"
+import { editProduct } from "@/actions"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -23,14 +23,7 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { UploadButton, UploadDropzone } from "@/lib/uploadthing"
 import { cn } from "@/lib/utils"
-import {
-  ChevronLeftIcon,
-  PlusCircle,
-  PlusCircleIcon,
-  TrashIcon,
-  X,
-  XIcon,
-} from "lucide-react"
+import { ChevronLeftIcon, XIcon } from "lucide-react"
 import Link from "next/link"
 import { useFormState } from "react-dom"
 import { useForm } from "@conform-to/react"
@@ -39,12 +32,25 @@ import { productSchema } from "@/zodSchema"
 import { useState } from "react"
 import Image from "next/image"
 import { SubmitBottom } from "@/components/submit-bottom"
+import { type $Enums } from "@prisma/client"
 
-interface CreateProps {}
+interface EditProductFormProps {
+  data: {
+    id: string
+    name: string
+    description: string
+    status: $Enums.ProductStatus
+    net: number
+    price: number
+    images: string[]
+    category: string
+    isFeatured: boolean
+  }
+}
 
-export default function ProductCreatePage({}: CreateProps) {
-  const [images, setImages] = useState<string[]>([])
-  const [lastResult, action] = useFormState(createProduct, undefined)
+export function EditProductForm({ data }: EditProductFormProps) {
+  const [images, setImages] = useState<string[]>(data.images)
+  const [lastResult, action] = useFormState(editProduct, undefined)
   const [form, fields] = useForm({
     lastResult,
 
@@ -58,7 +64,6 @@ export default function ProductCreatePage({}: CreateProps) {
   function handleDelete(index: number) {
     setImages(images.filter((_, i) => i !== index))
   }
-
   return (
     <form
       id={form.id}
@@ -66,20 +71,20 @@ export default function ProductCreatePage({}: CreateProps) {
       action={action}
       className={cn("")}
     >
+      <input type="hidden" name="productId" value={data.id} />
       <div className="flex items-center gap-4">
         <Button asChild variant="outline" size="icon">
           <Link href="/dashboard/products">
             <ChevronLeftIcon size={20} />
           </Link>
         </Button>
-        <h2 className="font-semibold text-xl tracking-tight">New Product</h2>
+        <h2 className="font-semibold text-xl tracking-tight">Edit Product</h2>
       </div>
       <Card className="mt-5">
         <CardHeader>
           <CardTitle>Product Details</CardTitle>
           <CardDescription>
-            Enter the details of the new product. Make sure to provide accurate
-            information.
+            In this form you can update your product.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -89,7 +94,7 @@ export default function ProductCreatePage({}: CreateProps) {
               <Input
                 key={fields.name.key}
                 name={fields.name.name}
-                defaultValue={fields.name.initialValue}
+                defaultValue={data.name}
                 className="w-full"
                 id="name"
                 placeholder="Enter product name"
@@ -97,39 +102,27 @@ export default function ProductCreatePage({}: CreateProps) {
               <p className="text-xs text-red-600">{fields.name.errors}</p>
             </div>
             <div className="flex flex-col gap-3">
-              <Label htmlFor="name">Complementary</Label>
+              <Label htmlFor="name">
+                <Label htmlFor="name">Complementary</Label>
+              </Label>
               <Textarea
                 key={fields.description.key}
                 name={fields.description.name}
-                defaultValue={fields.description.initialValue}
+                defaultValue={data.description}
                 className="w-full"
-                placeholder="Combine with..."
+                placeholder="Description of products"
               />
               <p className="text-xs text-red-600">
                 {fields.description.errors}
               </p>
             </div>
-            {/* <div className="flex flex-col gap-3">
-              <Label htmlFor="name">Ingredients</Label>
-              <Textarea
-                key={fields.ingredients.key}
-                name={fields.ingredients.name}
-                defaultValue={fields.ingredients.initialValue}
-                className="w-full"
-                placeholder="Ingredients of products"
-              />
-              <p className="text-xs text-red-600">
-                {fields.ingredients.errors}
-              </p>
-            </div> */}
-
             <div className="flex w-full items-center gap-4">
               <div className="flex flex-col gap-3 w-full">
                 <Label htmlFor="price">Price</Label>
                 <Input
                   key={fields.price.key}
                   name={fields.price.name}
-                  defaultValue={fields.price.initialValue}
+                  defaultValue={data.price}
                   inputMode="numeric"
                   type="number"
                   className="w-full"
@@ -139,16 +132,16 @@ export default function ProductCreatePage({}: CreateProps) {
                 <p className="text-xs text-red-600">{fields.price.errors}</p>
               </div>
               {/* <div className="flex flex-col gap-3 w-full">
-                <Label htmlFor="discount">Discount</Label>
+                <Label htmlFor="price">Discount</Label>
                 <Input
                   key={fields.discount.key}
                   name={fields.discount.name}
-                  defaultValue={fields.discount.initialValue}
+                  defaultValue={data.discount}
                   inputMode="numeric"
                   type="number"
                   className="w-full"
                   id="discount"
-                  placeholder="10"
+                  placeholder="47 €"
                 />
                 <p className="text-xs text-red-600">{fields.discount.errors}</p>
               </div> */}
@@ -157,7 +150,7 @@ export default function ProductCreatePage({}: CreateProps) {
                 <Input
                   key={fields.net.key}
                   name={fields.net.name}
-                  defaultValue={fields.net.initialValue}
+                  defaultValue={data.net}
                   type="number"
                   className="w-full"
                   id="net"
@@ -171,7 +164,7 @@ export default function ProductCreatePage({}: CreateProps) {
               <Switch
                 key={fields.isFeatured.key}
                 name={fields.isFeatured.name}
-                defaultValue={fields.isFeatured.initialValue}
+                defaultChecked={data.isFeatured}
               />
               <p className="text-xs text-red-600">{fields.isFeatured.errors}</p>
             </div>
@@ -180,7 +173,7 @@ export default function ProductCreatePage({}: CreateProps) {
               <Select
                 key={fields.status.key}
                 name={fields.status.name}
-                defaultValue={fields.status.initialValue}
+                defaultValue={data.status}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Status" />
@@ -198,7 +191,7 @@ export default function ProductCreatePage({}: CreateProps) {
               <Select
                 key={fields.category.key}
                 name={fields.category.name}
-                defaultValue={fields.category.initialValue}
+                defaultValue={data.category}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Category" />
@@ -219,7 +212,7 @@ export default function ProductCreatePage({}: CreateProps) {
                 value={images}
                 key={fields.images.key}
                 name={fields.images.name}
-                defaultValue={fields.images.initialValue as any}
+                defaultValue={data.images as any}
               />
               {images.length > 0 ? (
                 <div className="flex gap-5">
@@ -249,6 +242,7 @@ export default function ProductCreatePage({}: CreateProps) {
                     setImages(res.map((r) => r.url))
                   }}
                   onUploadError={(error: Error) => {
+                    // Do something with the error.
                     alert(`ERROR! ${error.message}`)
                   }}
                 />
@@ -258,7 +252,7 @@ export default function ProductCreatePage({}: CreateProps) {
           </div>
         </CardContent>
         <CardFooter>
-          <SubmitBottom label="Create Product" />
+          <SubmitBottom label="Update Product" />
         </CardFooter>
       </Card>
     </form>

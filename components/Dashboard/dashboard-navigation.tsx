@@ -7,7 +7,7 @@ const links = [
   { href: "/dashboard", name: "Dashboard" },
   { href: "/dashboard/orders", name: "Orders" },
   { href: "/dashboard/products", name: "Products" },
-  { href: "/dashboard/categories", name: "Categories" },
+  { href: "/dashboard/banner", name: "Banner Picture" },
 ]
 
 interface DashboardNavigationProps {}

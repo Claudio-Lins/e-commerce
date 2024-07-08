@@ -22,7 +22,7 @@ model Product {
   name        String
   description String
   status      ProductStatus @default(draft)
-  net         String?
+  net         Int
   price       Int
   images      String[]
   category    String
