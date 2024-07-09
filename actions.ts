@@ -28,6 +28,7 @@ export async function createProduct(prevState: unknown, formData: FormData) {
     data: {
       name: submission.value.name,
       complementary: submission.value.complementary,
+      ingredients: submission.value.ingredients,
       status: submission.value.status,
       net: submission.value.net,
       price: submission.value.price,
@@ -66,6 +67,7 @@ export async function editProduct(prevState: any, formData: FormData) {
     data: {
       name: submission.value.name,
       complementary: submission.value.complementary,
+      ingredients: submission.value.ingredients,
       status: submission.value.status,
       price: submission.value.price,
       net: submission.value.net,

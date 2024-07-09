@@ -39,6 +39,7 @@ interface EditProductFormProps {
     id: string
     name: string
     complementary: string
+    ingredients: string
     status: $Enums.ProductStatus
     net: number
     price: number
@@ -103,9 +104,7 @@ export function EditProductForm({ data }: EditProductFormProps) {
               <p className="text-xs text-red-600">{fields.name.errors}</p>
             </div>
             <div className="flex flex-col gap-3">
-              <Label htmlFor="name">
-                <Label htmlFor="name">Complementary</Label>
-              </Label>
+              <Label htmlFor="name">Complementary</Label>
               <Textarea
                 key={fields.complementary.key}
                 name={fields.complementary.name}
@@ -115,6 +114,19 @@ export function EditProductForm({ data }: EditProductFormProps) {
               />
               <p className="text-xs text-red-600">
                 {fields.complementary.errors}
+              </p>
+            </div>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="ingredients">Ingredients</Label>
+              <Textarea
+                key={fields.ingredients.key}
+                name={fields.ingredients.name}
+                defaultValue={data.ingredients}
+                className="w-full"
+                placeholder="Description of products"
+              />
+              <p className="text-xs text-red-600">
+                {fields.ingredients.errors}
               </p>
             </div>
             <div className="flex w-full items-center gap-4">

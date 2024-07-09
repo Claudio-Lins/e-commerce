@@ -97,7 +97,7 @@ export default function ProductCreatePage({}: CreateProps) {
               <p className="text-xs text-red-600">{fields.name.errors}</p>
             </div>
             <div className="flex flex-col gap-3">
-              <Label htmlFor="name">Complementary</Label>
+              <Label htmlFor="complementary">Complementary</Label>
               <Textarea
                 key={fields.complementary.key}
                 name={fields.complementary.name}
@@ -109,8 +109,8 @@ export default function ProductCreatePage({}: CreateProps) {
                 {fields.complementary.errors}
               </p>
             </div>
-            {/* <div className="flex flex-col gap-3">
-              <Label htmlFor="name">Ingredients</Label>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="ingredients">Ingredients</Label>
               <Textarea
                 key={fields.ingredients.key}
                 name={fields.ingredients.name}
@@ -121,7 +121,7 @@ export default function ProductCreatePage({}: CreateProps) {
               <p className="text-xs text-red-600">
                 {fields.ingredients.errors}
               </p>
-            </div> */}
+            </div>
 
             <div className="flex w-full items-center gap-4">
               <div className="flex flex-col gap-3 w-full">

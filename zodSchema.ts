@@ -3,6 +3,7 @@ import * as z from "zod"
 export const productSchema = z.object({
   name: z.string(),
   complementary: z.string(),
+  ingredients: z.string(),
   status: z.enum(["draft", "published", "archived"]),
   net: z.number(),
   discount: z.number(),
