@@ -138,7 +138,7 @@ export default function ProductCreatePage({}: CreateProps) {
                 />
                 <p className="text-xs text-red-600">{fields.price.errors}</p>
               </div>
-              {/* <div className="flex flex-col gap-3 w-full">
+              <div className="flex flex-col gap-3 w-full">
                 <Label htmlFor="discount">Discount</Label>
                 <Input
                   key={fields.discount.key}
@@ -151,7 +151,7 @@ export default function ProductCreatePage({}: CreateProps) {
                   placeholder="10"
                 />
                 <p className="text-xs text-red-600">{fields.discount.errors}</p>
-              </div> */}
+              </div>
               <div className="flex flex-col gap-3 w-full">
                 <Label htmlFor="net">Net</Label>
                 <Input

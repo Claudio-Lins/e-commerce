@@ -24,6 +24,7 @@ model Product {
   status        ProductStatus @default(draft)
   net           Int
   price         Int
+  discount      Int
   images        String[]
   category      String
   isFeatured    Boolean       @default(false)

@@ -42,6 +42,7 @@ interface EditProductFormProps {
     status: $Enums.ProductStatus
     net: number
     price: number
+    discount: number
     images: string[]
     category: string
     isFeatured: boolean
@@ -131,8 +132,8 @@ export function EditProductForm({ data }: EditProductFormProps) {
                 />
                 <p className="text-xs text-red-600">{fields.price.errors}</p>
               </div>
-              {/* <div className="flex flex-col gap-3 w-full">
-                <Label htmlFor="price">Discount</Label>
+              <div className="flex flex-col gap-3 w-full">
+                <Label htmlFor="discount">Discount</Label>
                 <Input
                   key={fields.discount.key}
                   name={fields.discount.name}
@@ -144,7 +145,7 @@ export function EditProductForm({ data }: EditProductFormProps) {
                   placeholder="47 €"
                 />
                 <p className="text-xs text-red-600">{fields.discount.errors}</p>
-              </div> */}
+              </div>
               <div className="flex flex-col gap-3 w-full">
                 <Label htmlFor="net">Net</Label>
                 <Input
