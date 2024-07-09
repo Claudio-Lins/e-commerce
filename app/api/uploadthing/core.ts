@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/prisma"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { createUploadthing, type FileRouter } from "uploadthing/next"
 import { UploadThingError } from "uploadthing/server"
@@ -13,8 +14,11 @@ export const ourFileRouter = {
       const { getUser } = getKindeServerSession()
       const user = await getUser()
 
+      const userRole = await prisma.user.findUnique({
+        where: { id: user?.id },
+      })
       // If you throw, the user will not be able to upload
-      if (!user || user.email !== "claudio.lins@me.com")
+      if (!user || userRole?.role !== "admin")
         throw new UploadThingError("Unauthorized")
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`

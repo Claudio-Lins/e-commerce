@@ -10,7 +10,11 @@ export async function createProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession()
   const user = await getUser()
 
-  if (!user || user.email !== "claudio.lins@me.com") {
+  const userRole = await prisma.user.findUnique({
+    where: { id: user?.id },
+  })
+
+  if (!user || userRole?.role !== "admin") {
     return redirect("/")
   }
   console.log("formData", formData)

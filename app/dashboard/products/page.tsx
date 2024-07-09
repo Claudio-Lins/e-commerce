@@ -90,10 +90,6 @@ export default async function Products({}: ProductsProps) {
                     {product.status}
                   </TableCell>
                   <TableCell className="">
-                    {/* {Intl.NumberFormat("pt-PT", {
-                      style: "currency",
-                      currency: "EUR",
-                    }).format(product.price)} */}
                     {currency(product.price, product.discount)}
                   </TableCell>
                   <TableCell className="">{product.net}gr</TableCell>
