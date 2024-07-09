@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/table"
 import { prisma } from "@/lib/prisma"
 import { cn } from "@/lib/utils"
+import { currency } from "@/utils/currency"
 import { MoreHorizontalIcon, PlusCircleIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -89,10 +90,11 @@ export default async function Products({}: ProductsProps) {
                     {product.status}
                   </TableCell>
                   <TableCell className="">
-                    {Intl.NumberFormat("pt-PT", {
+                    {/* {Intl.NumberFormat("pt-PT", {
                       style: "currency",
                       currency: "EUR",
-                    }).format(product.price)}
+                    }).format(product.price)} */}
+                    {currency(product.price, product.discount)}
                   </TableCell>
                   <TableCell className="">{product.net}gr</TableCell>
                   <TableCell className="">
