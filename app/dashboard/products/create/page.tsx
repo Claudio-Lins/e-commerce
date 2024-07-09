@@ -99,14 +99,14 @@ export default function ProductCreatePage({}: CreateProps) {
             <div className="flex flex-col gap-3">
               <Label htmlFor="name">Complementary</Label>
               <Textarea
-                key={fields.description.key}
-                name={fields.description.name}
-                defaultValue={fields.description.initialValue}
+                key={fields.complementary.key}
+                name={fields.complementary.name}
+                defaultValue={fields.complementary.initialValue}
                 className="w-full"
                 placeholder="Combine with..."
               />
               <p className="text-xs text-red-600">
-                {fields.description.errors}
+                {fields.complementary.errors}
               </p>
             </div>
             {/* <div className="flex flex-col gap-3">

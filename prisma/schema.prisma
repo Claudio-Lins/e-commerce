@@ -18,15 +18,15 @@ model User {
 }
 
 model Product {
-  id          String        @id @default(cuid())
-  name        String
-  description String
-  status      ProductStatus @default(draft)
-  net         Int
-  price       Int
-  images      String[]
-  category    String
-  isFeatured  Boolean       @default(false)
+  id            String        @id @default(cuid())
+  name          String
+  complementary String
+  status        ProductStatus @default(draft)
+  net           Int
+  price         Int
+  images        String[]
+  category      String
+  isFeatured    Boolean       @default(false)
 
   createdAt DateTime @default(now())
 }

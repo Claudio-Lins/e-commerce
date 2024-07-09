@@ -27,7 +27,7 @@ export async function createProduct(prevState: unknown, formData: FormData) {
   await prisma.product.create({
     data: {
       name: submission.value.name,
-      description: submission.value.description,
+      complementary: submission.value.complementary,
       status: submission.value.status,
       net: submission.value.net,
       price: submission.value.price,
@@ -64,9 +64,10 @@ export async function editProduct(prevState: any, formData: FormData) {
     where: { id: productId },
     data: {
       name: submission.value.name,
-      description: submission.value.description,
+      complementary: submission.value.complementary,
       status: submission.value.status,
       price: submission.value.price,
+      net: submission.value.net,
       images: flattenUrls,
       category: submission.value.category,
       isFeatured: submission.value.isFeatured === true ? true : false,
