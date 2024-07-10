@@ -135,3 +135,24 @@ export async function createBanner(prevState: any, formData: FormData) {
   })
   return redirect("/dashboard/banner")
 }
+
+// DELETE BANNER
+export async function deleteBanner(formData: FormData) {
+  const { getUser } = getKindeServerSession()
+  const user = await getUser()
+
+  const userRole = await prisma.user.findUnique({
+    where: { id: user?.id },
+  })
+
+  if (!user || userRole?.role !== "admin") {
+    return redirect("/")
+  }
+
+  await prisma.banner.delete({
+    where: {
+      id: formData.get("bannerId") as string,
+    },
+  })
+  return redirect("/dashboard/banner")
+}

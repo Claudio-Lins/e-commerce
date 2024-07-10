@@ -31,7 +31,9 @@ import Link from "next/link"
 interface CategoriesProps {}
 
 async function getBanners() {
-  const data = await prisma.banner.findMany()
+  const data = await prisma.banner.findMany({
+    orderBy: { createdAt: "desc" },
+  })
   return data
 }
 
@@ -87,13 +89,10 @@ export default async function BannerPage({}: CategoriesProps) {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                          <Link href={`/dashboard/products/`}>
-                            <span>Edit</span>
-                          </Link>
-                        </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/products/`}>Delete</Link>
+                          <Link href={`/dashboard/banner/${banner.id}/delete`}>
+                            Delete
+                          </Link>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
