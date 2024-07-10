@@ -3,7 +3,7 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { redirect } from "next/navigation"
 import { parseWithZod } from "@conform-to/zod"
-import { productSchema } from "./zodSchema"
+import { bannerSchema, productSchema } from "./zodSchema"
 import { prisma } from "./lib/prisma"
 
 export async function createProduct(prevState: unknown, formData: FormData) {
@@ -17,7 +17,7 @@ export async function createProduct(prevState: unknown, formData: FormData) {
   if (!user || userRole?.role !== "admin") {
     return redirect("/")
   }
-  console.log("formData", formData)
+
   const submission = parseWithZod(formData, { schema: productSchema })
 
   if (submission.status !== "success") {
@@ -50,7 +50,11 @@ export async function editProduct(prevState: any, formData: FormData) {
   const { getUser } = getKindeServerSession()
   const user = await getUser()
 
-  if (!user || user.email !== "claudio.lins@me.com") {
+  const userRole = await prisma.user.findUnique({
+    where: { id: user?.id },
+  })
+
+  if (!user || userRole?.role !== "admin") {
     return redirect("/")
   }
 
@@ -89,7 +93,11 @@ export async function deleteProduct(formData: FormData) {
   const { getUser } = getKindeServerSession()
   const user = await getUser()
 
-  if (!user || user.email !== "claudio.lins@me.com") {
+  const userRole = await prisma.user.findUnique({
+    where: { id: user?.id },
+  })
+
+  if (!user || userRole?.role !== "admin") {
     return redirect("/")
   }
 
@@ -99,4 +107,31 @@ export async function deleteProduct(formData: FormData) {
     },
   })
   return redirect("/dashboard/products")
+}
+
+// CREATE BANNER
+export async function createBanner(prevState: any, formData: FormData) {
+  const { getUser } = getKindeServerSession()
+  const user = await getUser()
+
+  const userRole = await prisma.user.findUnique({
+    where: { id: user?.id },
+  })
+
+  if (!user || userRole?.role !== "admin") {
+    return redirect("/")
+  }
+
+  const submission = parseWithZod(formData, { schema: bannerSchema })
+  if (submission.status !== "success") {
+    return submission.reply()
+  }
+
+  await prisma.banner.create({
+    data: {
+      title: submission.value.title,
+      imageString: submission.value.imageString,
+    },
+  })
+  return redirect("/dashboard/banner")
 }
