@@ -28,7 +28,7 @@ export function ImageSlide({ images }: ImageSlideProps) {
   }
 
   return (
-    <div className={cn("grid items-start gap-6 md:gap-3")}>
+    <div className={cn("grid grid-cols-1 items-start gap-6 md:gap-3")}>
       <div className="relative overflow-hidden rounded-lg">
         <Image
           src={images[mainImageIndex]}
@@ -37,23 +37,25 @@ export function ImageSlide({ images }: ImageSlideProps) {
           height={600}
           className="h-[600px] w-[600px] object-cover object-center"
         />
-        <div className="absolute inset-0 flex items-center justify-between px-4">
-          <Button onClick={handlePreviewsClick} variant="ghost" size="icon">
-            <ChevronLeft size={24} />
-          </Button>
-          <Button onClick={handleNextClick} variant="ghost" size="icon">
-            <ChevronRight size={24} />
-          </Button>
-        </div>
+        {images.length > 2 && (
+          <div className="absolute inset-0 flex items-center justify-between px-4">
+            <Button onClick={handlePreviewsClick} variant="ghost" size="icon">
+              <ChevronLeft size={24} />
+            </Button>
+            <Button onClick={handleNextClick} variant="ghost" size="icon">
+              <ChevronRight size={24} />
+            </Button>
+          </div>
+        )}
       </div>
       <Separator className="my-2" />
-      <div className="grid grid-cols-5 gap-4">
+      <div className="flex items-center gap-4">
         {images.map((image, index) => (
           <div
             key={index}
             onClick={() => handleImageClick(index)}
             className={cn(
-              "cursor-pointer overflow-hidden rounded-md p-1",
+              "size-20 transform cursor-pointer overflow-hidden rounded-md p-2 transition-transform duration-500 hover:scale-105",
               index === mainImageIndex
                 ? "scale-110 border-2 border-blue-500"
                 : "border border-muted-foreground/30",
@@ -64,7 +66,7 @@ export function ImageSlide({ images }: ImageSlideProps) {
               alt="Image"
               width={100}
               height={100}
-              className="transform cursor-pointer rounded-lg object-cover object-center shadow-sm transition-transform duration-500 hover:scale-105"
+              className="size-20 object-cover object-center"
             />
           </div>
         ))}

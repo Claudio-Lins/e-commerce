@@ -11,6 +11,7 @@ import { currency } from "@/utils/currency";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { Price } from "../price";
 
 interface ProductCardProps {
   product: {
@@ -28,7 +29,11 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   return (
-    <div className={cn("rounded-lg border p-4 shadow-md")}>
+    <div
+      className={cn(
+        "flex flex-col justify-between gap-2 rounded-lg border p-4 shadow-md",
+      )}
+    >
       <Carousel className="mx-auto w-full">
         <CarouselContent>
           {product.images.map((image, index) => (
@@ -47,19 +52,17 @@ export function ProductCard({ product }: ProductCardProps) {
         {product.images.length > 1 && <CarouselPrevious className="ml-16" />}
         {product.images.length > 1 && <CarouselNext className="mr-16" />}
       </Carousel>
-      <div className="mt-2 flex items-center justify-between">
-        <h2 className="text-lg font-bold">{product.name}</h2>
-        <strong className="inline-flex items-center rounded-md bg-primary/10 px-2 py-1 text-xs ring-1 ring-inset ring-primary/10">
-          {currency(product.price, product.discount)}
-        </strong>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-bold leading-5">{product.name}</h2>
+        <Price price={product.price} discount={product.discount} />
       </div>
-      <Separator className="my-2" />
+      <Separator className="" />
       <div className="space-y-2">
         <p className="line-clamp-2 text-sm font-medium">
           {product.complementary}
         </p>
       </div>
-      <div className="ga-4 mt-4 flex items-center justify-between">
+      <div className="ga-4 flex items-center justify-between">
         <Button asChild variant="link" className="w-full">
           <Link href={`/product/${product.id}`}>More details...</Link>
         </Button>

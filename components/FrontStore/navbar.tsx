@@ -1,24 +1,24 @@
-import { cn } from "@/lib/utils"
-import Link from "next/link"
-import { NavbarLinks } from "./navbar-links"
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { NavbarLinks } from "./navbar-links";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import {
   LoginLink,
   RegisterLink,
-} from "@kinde-oss/kinde-auth-nextjs/components"
-import { ShoppingBagIcon } from "lucide-react"
-import { UserDropdown } from "./user-dropdown"
-import { Button } from "../ui/button"
+} from "@kinde-oss/kinde-auth-nextjs/components";
+import { ShoppingBagIcon, User2 } from "lucide-react";
+import { UserDropdown } from "./user-dropdown";
+import { Button } from "../ui/button";
 
 interface NavbarProps {}
 
 export async function Navbar({}: NavbarProps) {
-  const { getUser } = getKindeServerSession()
-  const user = await getUser()
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
   return (
     <nav
       className={cn(
-        "w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between"
+        "mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8",
       )}
     >
       <div className="flex items-center">
@@ -33,12 +33,12 @@ export async function Navbar({}: NavbarProps) {
       <div className="flex items-center">
         {user ? (
           <>
-            <Link href="/bag" className="group p-2 items-center mr-2 flex">
+            <Link href="/bag" className="group mr-2 flex items-center p-2">
               <ShoppingBagIcon
                 size={24}
                 className="text-zinc-400 group-hover:text-zinc-600"
               />
-              <span className="ml-2 font-medium text-sm text-zinc-400 group-hover:text-zinc-800">
+              <span className="ml-2 text-sm font-medium text-zinc-400 group-hover:text-zinc-800">
                 5
               </span>
             </Link>
@@ -52,7 +52,9 @@ export async function Navbar({}: NavbarProps) {
         ) : (
           <div className="hidden md:flex md:flex-1 md:items-center md:justify-end">
             <Button variant="ghost" asChild>
-              <LoginLink>Sign in</LoginLink>
+              <LoginLink>
+                <User2 />
+              </LoginLink>
             </Button>
             <Button variant="ghost" asChild>
               <RegisterLink>Sign up</RegisterLink>
@@ -61,5 +63,5 @@ export async function Navbar({}: NavbarProps) {
         )}
       </div>
     </nav>
-  )
+  );
 }

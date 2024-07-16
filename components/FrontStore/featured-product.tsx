@@ -6,8 +6,9 @@ interface FeaturedProductProps {}
 
 async function getProducts() {
   const data = await prisma.product.findMany({
-    where: { status: "published" },
+    where: { status: "published", isFeatured: true },
     orderBy: { createdAt: "desc" },
+    take: 3,
   });
   return data;
 }
