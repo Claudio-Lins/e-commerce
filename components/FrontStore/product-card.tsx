@@ -12,6 +12,7 @@ import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Price } from "../price";
+import { AspectRatio } from "../ui/aspect-ratio";
 
 interface ProductCardProps {
   product: {
@@ -31,7 +32,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div
       className={cn(
-        "flex flex-col justify-between gap-2 rounded-lg border p-4 shadow-md",
+        "flex w-full flex-col justify-between gap-2 rounded-lg border p-4 shadow-md",
       )}
     >
       <Carousel className="mx-auto w-full">
@@ -39,12 +40,14 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.images.map((image, index) => (
             <CarouselItem key={index}>
               <div className="relative h-80">
-                <Image
-                  className="h-full w-full rounded-lg object-cover object-center"
-                  src={image}
-                  alt={product.name}
-                  fill
-                />
+                <AspectRatio ratio={1}>
+                  <Image
+                    className="h-full w-full rounded-lg object-cover object-center"
+                    src={image}
+                    alt={product.name}
+                    fill
+                  />
+                </AspectRatio>
               </div>
             </CarouselItem>
           ))}
@@ -62,7 +65,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.complementary}
         </p>
       </div>
-      <div className="ga-4 flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <Button asChild variant="link" className="w-full">
           <Link href={`/product/${product.id}`}>More details...</Link>
         </Button>

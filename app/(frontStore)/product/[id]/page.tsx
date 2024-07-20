@@ -7,6 +7,8 @@ import { ShoppingBagIcon, StarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FeaturedProduct } from "@/components/FrontStore/featured-product";
 import { Price } from "@/components/price";
+import { addItem } from "@/actions";
+import { ShoppingBagButton } from "@/components/submit-bottom";
 
 interface ProductProps {
   params: {
@@ -15,6 +17,7 @@ interface ProductProps {
 }
 
 async function getProduct(productId: string) {
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const data = await prisma.product.findUnique({
     where: { id: productId },
   });
@@ -26,6 +29,7 @@ async function getProduct(productId: string) {
 
 export default async function Product({ params }: ProductProps) {
   const product = await getProduct(params.id);
+  const addProductToShoppingCart = addItem.bind(null, product.id);
 
   return (
     <>
@@ -49,10 +53,9 @@ export default async function Product({ params }: ProductProps) {
           </div>
           <p className="text-sm font-medium">{product.complementary}</p>
           <div className="mt-4">
-            <Button className="mt-5 w-full">
-              {" "}
-              <ShoppingBagIcon size={20} className="mr-4" /> Add to cart
-            </Button>
+            <form action={addProductToShoppingCart}>
+              <ShoppingBagButton />
+            </form>
           </div>
         </div>
       </div>

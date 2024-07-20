@@ -11,7 +11,7 @@ interface FrontStoreProps {}
 
 export default function FrontStorePage({}: FrontStoreProps) {
   return (
-    <div className={cn("pb-20")}>
+    <div className={cn("pb-10")}>
       <Hero />
       <CategorySelection />
       <FeaturedProduct />

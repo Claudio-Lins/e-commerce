@@ -9,12 +9,17 @@ import {
 import { ShoppingBagIcon, User2 } from "lucide-react";
 import { UserDropdown } from "./user-dropdown";
 import { Button } from "../ui/button";
+import { redis } from "@/lib/redis";
+import { CartTypes } from "@/@types/cart-types";
 
 interface NavbarProps {}
 
 export async function Navbar({}: NavbarProps) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
+
+  const cart: CartTypes | null = await redis.get(`cart-${user?.id}`);
+  const totalItems = cart?.items.reduce((acc, item) => acc + item.quantity, 0);
   return (
     <nav
       className={cn(
@@ -38,8 +43,8 @@ export async function Navbar({}: NavbarProps) {
                 size={24}
                 className="text-zinc-400 group-hover:text-zinc-600"
               />
-              <span className="ml-2 text-sm font-medium text-zinc-400 group-hover:text-zinc-800">
-                5
+              <span className="ml-2 text-sm font-semibold text-zinc-500 group-hover:text-zinc-800">
+                ({totalItems})
               </span>
             </Link>
             <UserDropdown
@@ -50,7 +55,7 @@ export async function Navbar({}: NavbarProps) {
             />
           </>
         ) : (
-          <div className="hidden md:flex md:flex-1 md:items-center md:justify-end">
+          <div className="flex md:flex-1 md:items-center md:justify-end">
             <Button variant="ghost" asChild>
               <LoginLink>
                 <User2 />

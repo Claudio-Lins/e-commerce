@@ -8,6 +8,8 @@ interface CategoriesPageProps {
 }
 
 async function getCategories(productCategory: string) {
+  // acrescentar um delay de 5 segundos
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
   switch (productCategory) {
     case "all": {
       const data = await prisma.product.findMany({
