@@ -29,8 +29,7 @@ export async function Navbar({}: NavbarProps) {
       <div className="flex items-center">
         <Link href="/">
           <h1>
-            <span className="text-3xl font-bold tracking-tight">NextJS</span>
-            <span className="text-sm font-medium">Tailwind CSS</span>
+            <span className="text-3xl font-black tracking-tight">Logo</span>
           </h1>
         </Link>
         <NavbarLinks />
