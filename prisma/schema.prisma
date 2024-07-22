@@ -15,6 +15,8 @@ model User {
   role         UserRole @default(user)
   profileImage String
 
+  orders Order[]
+
   createdAt DateTime @default(now())
 }
 
@@ -40,6 +42,15 @@ model Banner {
   imageString String
 
   createdAt DateTime @default(now())
+}
+
+model Order {
+  id     String @id @default(cuid())
+  status String @default("pending")
+  amount Int
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
 }
 
 enum ProductStatus {

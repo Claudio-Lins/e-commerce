@@ -73,3 +73,21 @@ export function DeleteItem() {
     </>
   );
 }
+
+export function CheckOutButton() {
+  const { pending } = useFormStatus();
+  return (
+    <>
+      {pending ? (
+        <Button size="lg" className="mt-8 w-full">
+          <LoaderCircle size={16} className={cn("mr-2 h-4 w-4 animate-spin")} />
+          Please wait...
+        </Button>
+      ) : (
+        <Button type="submit" size="lg" className="mt-8 w-full">
+          Checkout
+        </Button>
+      )}
+    </>
+  );
+}

@@ -8,6 +8,8 @@ import { prisma } from "./lib/prisma";
 import { redis } from "./lib/redis";
 import { CartTypes } from "./@types/cart-types";
 import { revalidatePath } from "next/cache";
+import { stripe } from "./lib/stripe";
+import Stripe from "stripe";
 
 export async function createProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
@@ -243,4 +245,42 @@ export async function deleteItem(formData: FormData) {
     await redis.set(`cart-${user.id}`, updateCart);
   }
   revalidatePath("/bag");
+}
+
+export async function checkOut() {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) {
+    return redirect("/");
+  }
+
+  let cart: CartTypes | null = await redis.get(`cart-${user.id}`);
+
+  if (cart && cart.items) {
+    const lineItens: Stripe.Checkout.SessionCreateParams.LineItem[] =
+      cart.items.map((item) => ({
+        price_data: {
+          currency: "eur",
+          unit_amount: Math.round(item.price * 100),
+          product_data: {
+            name: item.name,
+            images: [item.imageString],
+          },
+        },
+        quantity: item.quantity,
+      }));
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["multibanco", "card"],
+      line_items: lineItens,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/cancel`,
+      metadata: {
+        userId: user.id,
+      },
+    });
+    return redirect(session.url as string);
+  }
 }

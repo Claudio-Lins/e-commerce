@@ -1,6 +1,6 @@
 import { CartTypes } from "@/@types/cart-types";
-import { deleteItem } from "@/actions";
-import { DeleteItem } from "@/components/submit-bottom";
+import { checkOut, deleteItem } from "@/actions";
+import { CheckOutButton, DeleteItem } from "@/components/submit-bottom";
 import { Button } from "@/components/ui/button";
 import { redis } from "@/lib/redis";
 import { cn } from "@/lib/utils";
@@ -83,9 +83,9 @@ export default async function Bag({}: BagProps) {
                 }).format(totalPrice)}
               </p>
             </div>
-            <Button size="lg" className="mt-5 w-full">
-              Checkout
-            </Button>
+            <form action={checkOut}>
+              <CheckOutButton />
+            </form>
           </div>
         </div>
       )}
