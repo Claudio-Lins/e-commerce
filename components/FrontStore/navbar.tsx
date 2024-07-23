@@ -43,7 +43,7 @@ export async function Navbar({}: NavbarProps) {
                 className="text-zinc-400 group-hover:text-zinc-600"
               />
               <span className="ml-2 text-sm font-semibold text-zinc-500 group-hover:text-zinc-800">
-                ({totalItems})
+                {totalItems}
               </span>
             </Link>
             <UserDropdown

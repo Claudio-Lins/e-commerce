@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -12,12 +12,35 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/table";
+import { prisma } from "@/lib/prisma";
+import { cn } from "@/lib/utils";
+import { currency } from "@/utils/currency";
 
 interface OrdersProps {}
 
-export default function Orders({}: OrdersProps) {
+async function getOrders() {
+  const data = await prisma.order.findMany({
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      amount: true,
+      status: true,
+      createdAt: true,
+      User: {
+        select: {
+          email: true,
+          firstName: true,
+          profileImage: true,
+        },
+      },
+    },
+  });
+  return data;
+}
+
+export default async function Orders({}: OrdersProps) {
+  const orders = await getOrders();
   return (
     <Card>
       <CardHeader className="px-7">
@@ -36,29 +59,37 @@ export default function Orders({}: OrdersProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <p className="font-medium">Estela Lins</p>
-                <p className="hidden md:flex text-sm text-muted-foreground">
-                  estela.lins@me.com
-                </p>
-              </TableCell>
-              <TableCell>
-                <p className="font-medium">Sales</p>
-              </TableCell>
-              <TableCell>
-                <p className="font-medium">Delivered</p>
-              </TableCell>
-              <TableCell>
-                <p className="text-sm text-muted-foreground">12/02/2023</p>
-              </TableCell>
-              <TableCell className="text-right">
-                <p className="font-medium">+ 147,00 €</p>
-              </TableCell>
-            </TableRow>
+            {orders.map((order) => (
+              <TableRow key={order.id}>
+                <TableCell>
+                  <p className="font-medium">{order.User?.firstName}</p>
+                  <p className="hidden text-sm text-muted-foreground md:flex">
+                    {order.User?.email}
+                  </p>
+                </TableCell>
+                <TableCell>
+                  <p className="font-medium">Order</p>
+                </TableCell>
+                <TableCell>
+                  <p className="font-medium">{order.status}</p>
+                </TableCell>
+                <TableCell>
+                  <p className="text-sm text-muted-foreground">
+                    {new Intl.DateTimeFormat("pt-PT", {
+                      year: "numeric",
+                      month: "short",
+                      day: "2-digit",
+                    }).format(order.createdAt)}
+                  </p>
+                </TableCell>
+                <TableCell className="text-right">
+                  <p className="font-medium">{currency(order.amount / 100)}</p>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }

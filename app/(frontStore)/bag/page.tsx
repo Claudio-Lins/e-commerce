@@ -28,7 +28,7 @@ export default async function Bag({}: BagProps) {
 
   return (
     <div className={cn("mx-auto mt-10 min-h-[55vh] max-w-2xl")}>
-      {cart?.items.length === 0 ? (
+      {!cart || !cart.items ? (
         <div className="mt-20 flex min-h-[400px] flex-col items-center justify-center rounded-lg border border-dashed p-8">
           <div className="flex size-20 items-center justify-center rounded-full bg-primary/10">
             <ShoppingBag size={40} className="text-primary" />
