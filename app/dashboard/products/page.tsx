@@ -1,12 +1,12 @@
-import { createProduct } from "@/actions"
-import { Button } from "@/components/ui/button"
+import { createProduct } from "@/actions";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +14,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/ui/dropdown-menu";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -23,22 +23,24 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { prisma } from "@/lib/prisma"
-import { cn } from "@/lib/utils"
-import { currency } from "@/utils/currency"
-import { MoreHorizontalIcon, PlusCircleIcon } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+} from "@/components/ui/table";
+import { prisma } from "@/lib/prisma";
+import { cn } from "@/lib/utils";
+import { currency } from "@/utils/currency";
+import { MoreHorizontalIcon, PlusCircleIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { unstable_noStore as noStore } from "next/cache";
 
 interface ProductsProps {}
 
 async function getProducts() {
-  const data = await prisma.product.findMany()
-  return data
+  const data = await prisma.product.findMany();
+  return data;
 }
 export default async function Products({}: ProductsProps) {
-  const products = await getProducts()
+  noStore();
+  const products = await getProducts();
   return (
     <>
       <div className={cn("flex items-center justify-end")}>
@@ -62,12 +64,12 @@ export default async function Products({}: ProductsProps) {
             <TableHeader className="">
               <TableRow className="">
                 <TableHead className="w-16 md:w-44">Image</TableHead>
-                <TableHead className=" md:w-80">Name</TableHead>
+                <TableHead className="md:w-80">Name</TableHead>
                 <TableHead className="hidden md:table-cell">Status</TableHead>
                 <TableHead className="hidden md:table-cell">Price</TableHead>
                 <TableHead className="hidden md:table-cell">Net</TableHead>
                 <TableHead className="hidden md:table-cell">Date</TableHead>
-                <TableHead className=" text-right">Actions</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
           </Table>
@@ -82,18 +84,18 @@ export default async function Products({}: ProductsProps) {
                         alt={`${product.name} imagem`}
                         width={80}
                         height={80}
-                        className="w-14 h-14 md:w-20 md:h-20 rounded-lg md:shadow-sm p-1 object-cover"
+                        className="h-14 w-14 rounded-lg object-cover p-1 md:h-20 md:w-20 md:shadow-sm"
                       />
                     </TableCell>
                     <TableCell
                       className={cn(
-                        " md:w-80",
-                        product.isFeatured ? "font-bold" : ""
+                        "md:w-80",
+                        product.isFeatured ? "font-bold" : "",
                       )}
                     >
                       {product.name}
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground hidden md:table-cell">
+                    <TableCell className="hidden text-sm text-muted-foreground md:table-cell">
                       {product.status}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
@@ -142,5 +144,5 @@ export default async function Products({}: ProductsProps) {
         </CardContent>
       </Card>
     </>
-  )
+  );
 }

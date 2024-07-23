@@ -2,6 +2,7 @@ import { ProductCard } from "@/components/FrontStore/product-card";
 import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import { notFound } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 
 interface CategoriesPageProps {
   params: { name: string };
@@ -58,6 +59,7 @@ async function getCategories(productCategory: string) {
 }
 
 export default async function CategoriesPage({ params }: CategoriesPageProps) {
+  noStore();
   const { products, title } = await getCategories(params.name);
   return (
     <section className={cn("")}>

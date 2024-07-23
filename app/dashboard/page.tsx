@@ -1,7 +1,7 @@
 import { Chart } from "@/components/Dashboard/chart";
 import { DashboardStats } from "@/components/Dashboard/dashboarb-stats";
 import { RecentSales } from "@/components/Dashboard/recent-sales";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { unstable_noStore as noStore } from "next/cache";
 import {
   Card,
   CardContent,
@@ -10,13 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
-import { cn } from "@/lib/utils";
-import {
-  DollarSignIcon,
-  PartyPopperIcon,
-  ShoppingBagIcon,
-  User2,
-} from "lucide-react";
 
 interface DashboardProps {}
 
@@ -47,6 +40,7 @@ async function getData() {
 }
 
 export default async function Dashboard({}: DashboardProps) {
+  noStore();
   const data = await getData();
   return (
     <>

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { ProductCard } from "./product-card";
 import { Suspense } from "react";
 import { ProductSkeletonCard } from "../skeleton/product-skeleton-card";
+import { unstable_noStore as noStore } from "next/cache";
 
 interface FeaturedProductProps {}
 
@@ -35,6 +36,7 @@ export function FeaturedProduct({}: FeaturedProductProps) {
   );
 }
 export async function LoadFeaturedProduct({}: FeaturedProductProps) {
+  noStore();
   const products = await getProducts();
   return (
     <>

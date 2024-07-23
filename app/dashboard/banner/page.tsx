@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -21,24 +21,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { prisma } from "@/lib/prisma"
-import { cn } from "@/lib/utils"
-import { MoreHorizontalIcon, PlusCircleIcon, User2 } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+} from "@/components/ui/table";
+import { prisma } from "@/lib/prisma";
+import { cn } from "@/lib/utils";
+import { MoreHorizontalIcon, PlusCircleIcon, User2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { unstable_noStore as noStore } from "next/cache";
 
 interface CategoriesProps {}
 
 async function getBanners() {
   const data = await prisma.banner.findMany({
     orderBy: { createdAt: "desc" },
-  })
-  return data
+  });
+  return data;
 }
 
 export default async function BannerPage({}: CategoriesProps) {
-  const banners = await getBanners()
+  noStore();
+  const banners = await getBanners();
   return (
     <>
       <div className={cn("flex items-center justify-end")}>
@@ -75,7 +77,7 @@ export default async function BannerPage({}: CategoriesProps) {
                       alt={`${banner.title} imagem`}
                       width={80}
                       height={80}
-                      className="w-14 h-14 md:w-28 md:h-28 rounded-lg md:shadow-sm p-1 object-cover"
+                      className="h-14 w-14 rounded-lg object-cover p-1 md:h-28 md:w-28 md:shadow-sm"
                     />
                   </TableCell>
                   <TableCell>{banner.title}</TableCell>
@@ -104,5 +106,5 @@ export default async function BannerPage({}: CategoriesProps) {
         </CardContent>
       </Card>
     </>
-  )
+  );
 }

@@ -7,12 +7,13 @@ import { cn } from "@/lib/utils";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { ShoppingBag } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 
 interface BagProps {}
 
 export default async function Bag({}: BagProps) {
+  noStore();
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   if (!user) {
@@ -62,7 +63,7 @@ export default async function Bag({}: BagProps) {
                       {Intl.NumberFormat("pt-PT", {
                         style: "currency",
                         currency: "EUR",
-                      }).format(item.price)}
+                      }).format(item.price / 100)}
                     </p>
                   </div>
                   <form action={deleteItem}>
@@ -80,7 +81,7 @@ export default async function Bag({}: BagProps) {
                 {Intl.NumberFormat("pt-PT", {
                   style: "currency",
                   currency: "EUR",
-                }).format(totalPrice)}
+                }).format(totalPrice / 100)}
               </p>
             </div>
             <form action={checkOut}>

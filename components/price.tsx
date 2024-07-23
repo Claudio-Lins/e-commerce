@@ -21,7 +21,7 @@ export function Price({ price, discount, big }: PriceProps) {
         {new Intl.NumberFormat("pt-PT", {
           style: "currency",
           currency: "EUR",
-        }).format(price)}
+        }).format(price / 100)}
       </span>
     );
   } else {
@@ -42,13 +42,13 @@ export function Price({ price, discount, big }: PriceProps) {
           {new Intl.NumberFormat("pt-PT", {
             style: "currency",
             currency: "EUR",
-          }).format(price)}
+          }).format(price / 100)}
         </span>
         <span className="ml-2 font-bold">
           {new Intl.NumberFormat("pt-PT", {
             style: "currency",
             currency: "EUR",
-          }).format(discountedPrice)}
+          }).format(discountedPrice / 100)}
         </span>
       </span>
     );

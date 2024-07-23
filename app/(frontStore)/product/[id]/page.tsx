@@ -9,6 +9,7 @@ import { FeaturedProduct } from "@/components/FrontStore/featured-product";
 import { Price } from "@/components/price";
 import { addItem } from "@/actions";
 import { ShoppingBagButton } from "@/components/submit-bottom";
+import { unstable_noStore as noStore } from "next/cache";
 
 interface ProductProps {
   params: {
@@ -28,6 +29,7 @@ async function getProduct(productId: string) {
 }
 
 export default async function Product({ params }: ProductProps) {
+  noStore();
   const product = await getProduct(params.id);
   const addProductToShoppingCart = addItem.bind(null, product.id);
 

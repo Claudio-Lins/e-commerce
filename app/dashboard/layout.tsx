@@ -1,6 +1,6 @@
-import { DashboardNavigation } from "@/components/Dashboard/dashboard-navigation"
-import { Button } from "@/components/ui/button"
-import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components"
+import { DashboardNavigation } from "@/components/Dashboard/dashboard-navigation";
+import { Button } from "@/components/ui/button";
+import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
@@ -16,39 +16,41 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
-import { CircleUserIcon, MenuIcon } from "lucide-react"
-import { redirect } from "next/navigation"
+} from "@/components/ui/sheet";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { CircleUserIcon, MenuIcon } from "lucide-react";
+import { redirect } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 
 export default async function DashboardLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-  const { getUser } = getKindeServerSession()
-  const user = await getUser()
+  noStore();
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
   if (!user) {
-    return redirect("/")
+    return redirect("/");
   }
   return (
-    <div className="w-full flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <header className=" sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-white">
+    <div className="mx-auto flex w-full max-w-7xl flex-col px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-white">
         <nav className="hidden font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <DashboardNavigation />
         </nav>
         <Sheet>
           <SheetTrigger asChild>
             <Button
-              className=" shrink-0 md:hidden"
+              className="shrink-0 md:hidden"
               variant="outline"
               size="icon"
             >
-              <MenuIcon className=" size-5" />
+              <MenuIcon className="size-5" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
-            <nav className="flex flex-col mt-6 gap-6 text-lg font-medium">
+            <nav className="mt-6 flex flex-col gap-6 text-lg font-medium">
               <DashboardNavigation />
             </nav>
           </SheetContent>
@@ -70,5 +72,5 @@ export default async function DashboardLayout({
       </header>
       <main className="my-5">{children}</main>
     </div>
-  )
+  );
 }

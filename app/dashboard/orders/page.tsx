@@ -16,6 +16,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import { currency } from "@/utils/currency";
+import { unstable_noStore as noStore } from "next/cache";
 
 interface OrdersProps {}
 
@@ -40,6 +41,7 @@ async function getOrders() {
 }
 
 export default async function Orders({}: OrdersProps) {
+  noStore();
   const orders = await getOrders();
   return (
     <Card>
