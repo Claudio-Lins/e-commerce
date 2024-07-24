@@ -11,10 +11,17 @@ import { UserDropdown } from "./user-dropdown";
 import { Button } from "../ui/button";
 import { redis } from "@/lib/redis";
 import { CartTypes } from "@/@types/cart-types";
+import { prisma } from "@/lib/prisma";
 
 interface NavbarProps {}
 
+async function getCategories() {
+  const data = await prisma.category.findMany();
+  return data;
+}
+
 export async function Navbar({}: NavbarProps) {
+  const categories = await getCategories();
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -32,7 +39,7 @@ export async function Navbar({}: NavbarProps) {
             <span className="text-3xl font-black tracking-tight">Logo</span>
           </h1>
         </Link>
-        <NavbarLinks />
+        <NavbarLinks categories={categories} />
       </div>
       <div className="flex items-center">
         {user ? (

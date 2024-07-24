@@ -1,19 +1,52 @@
-import * as z from "zod"
+import * as z from "zod";
 
-export const productSchema = z.object({
+export const productDetailSchema = z.object({
+  id: z.string().cuid(),
+  weight: z.number().int(),
+  netWeight: z.number().int().nullable().optional(),
+  validate: z.date().nullable().optional(),
+  discount: z.number().int().default(0),
+  price: z.number().int(),
+  currency: z.string().default("EUR"),
+  quantityInStock: z.number().int(),
+  onSales: z.boolean().default(false),
+  productId: z.string().uuid(),
+});
+
+export const categorySchema = z.object({
+  // id: z.string().cuid(),
+  title: z.string(),
+  href: z.string().optional(),
+  description: z.string().optional(),
+  categoryImageUrl: z.string().optional(),
+});
+
+export const ingredientSchema = z.object({
+  id: z.string().cuid(),
   name: z.string(),
-  complementary: z.string(),
-  ingredients: z.string(),
-  status: z.enum(["draft", "published", "archived"]),
-  net: z.number(),
-  discount: z.number(),
-  price: z.number().min(1),
-  images: z.array(z.string().min(1, "At least one image is required")),
-  category: z.enum(["jam", "utensils", "packages"]),
-  isFeatured: z.boolean().optional(),
-})
+  color: z.string().default("#000000"),
+  ingredientImageUrl: z.string().nullable().optional(),
+});
 
 export const bannerSchema = z.object({
+  id: z.string().cuid(),
   title: z.string(),
   imageString: z.string(),
-})
+});
+
+export const productSchema = z.object({
+  id: z.string().cuid().optional(),
+  name: z.string(),
+  slug: z.string(),
+  harmonization: z.string().default(""),
+  coverUrl: z.string(),
+  images: z.array(z.string()),
+  isDestack: z.boolean().default(false),
+  status: z.enum(["draft", "published", "archived"]),
+  isFeatured: z.boolean().default(false),
+  categoryId: z.string().nullable().optional(),
+  createdAt: z.date().optional(),
+  ingredients: z.array(ingredientSchema).optional(),
+  category: categorySchema.nullable().optional(),
+  productDetails: z.array(productDetailSchema).optional(),
+});

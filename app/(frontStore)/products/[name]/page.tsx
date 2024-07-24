@@ -9,46 +9,120 @@ interface CategoriesPageProps {
 }
 
 async function getCategories(productCategory: string) {
-  // acrescentar um delay de 5 segundos
-  // await new Promise((resolve) => setTimeout(resolve, 5000));
   switch (productCategory) {
     case "all": {
       const data = await prisma.product.findMany({
         where: { status: "published" },
         orderBy: { createdAt: "desc" },
+        include: {
+          ingredients: true,
+          category: {
+            select: {
+              id: true,
+              title: true,
+              href: true,
+              description: true,
+              categoryImageUrl: true,
+            },
+          },
+          productDetails: true,
+        },
       });
       return {
-        products: data,
+        products: data.map((product) => ({
+          ...product,
+          ingredients: product.ingredients.map((ingredient) => ({
+            ...ingredient,
+            imageUrl: ingredient.ingredientImageUrl || null, // Ensure imageUrl is present
+          })),
+        })),
         title: "All Products",
       };
     }
     case "jam": {
       const data = await prisma.product.findMany({
-        where: { status: "published", category: "jam" },
+        where: { status: "published", category: { title: "jam" } },
         orderBy: { createdAt: "desc" },
+        include: {
+          ingredients: true,
+          category: {
+            select: {
+              id: true,
+              title: true,
+              href: true,
+              description: true,
+              categoryImageUrl: true,
+            },
+          },
+          productDetails: true,
+        },
       });
       return {
-        products: data,
+        products: data.map((product) => ({
+          ...product,
+          ingredients: product.ingredients.map((ingredient) => ({
+            ...ingredient,
+            imageUrl: ingredient.ingredientImageUrl || null, // Ensure imageUrl is present
+          })),
+        })),
         title: "Jams",
       };
     }
     case "utensils": {
       const data = await prisma.product.findMany({
-        where: { status: "published", category: "utensils" },
+        where: { status: "published", category: { title: "utensils" } },
         orderBy: { createdAt: "desc" },
+        include: {
+          ingredients: true,
+          category: {
+            select: {
+              id: true,
+              title: true,
+              href: true,
+              description: true,
+              categoryImageUrl: true,
+            },
+          },
+          productDetails: true,
+        },
       });
       return {
-        products: data,
+        products: data.map((product) => ({
+          ...product,
+          ingredients: product.ingredients.map((ingredient) => ({
+            ...ingredient,
+            imageUrl: ingredient.ingredientImageUrl || null, // Ensure imageUrl is present
+          })),
+        })),
         title: "Utensils",
       };
     }
     case "packages": {
       const data = await prisma.product.findMany({
-        where: { status: "published", category: "packages" },
+        where: { status: "published", category: { title: "packages" } },
         orderBy: { createdAt: "desc" },
+        include: {
+          ingredients: true,
+          category: {
+            select: {
+              id: true,
+              title: true,
+              href: true,
+              description: true,
+              categoryImageUrl: true,
+            },
+          },
+          productDetails: true,
+        },
       });
       return {
-        products: data,
+        products: data.map((product) => ({
+          ...product,
+          ingredients: product.ingredients.map((ingredient) => ({
+            ...ingredient,
+            imageUrl: ingredient.ingredientImageUrl || null, // Ensure imageUrl is present
+          })),
+        })),
         title: "Gift Packages",
       };
     }

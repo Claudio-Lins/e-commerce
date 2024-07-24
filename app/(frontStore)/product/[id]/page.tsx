@@ -18,9 +18,13 @@ interface ProductProps {
 }
 
 async function getProduct(productId: string) {
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const data = await prisma.product.findUnique({
     where: { id: productId },
+    include: {
+      ingredients: true,
+      category: true,
+      productDetails: true,
+    },
   });
   if (!data) {
     return notFound();
@@ -41,10 +45,21 @@ export default async function Product({ params }: ProductProps) {
           <h1 className="text-3xl font-extrabold tracking-tight">
             {product.name}
           </h1>
-          <Price big={true} price={product.price} discount={product.discount} />
+          {product?.productDetails?.map((productDetail) => (
+            <div className="flex items-center space-x-4" key={productDetail.id}>
+              <Price
+                price={productDetail.price}
+                discount={productDetail.discount || 0}
+                big={true}
+              />
+              <p className="text-sm font-bold text-gray-500">
+                {productDetail.weight}gr
+              </p>
+            </div>
+          ))}
           <div className="flex items-center gap-x-4">
-            <p className="text-sm font-bold capitalize">{product.category}</p>
-            <p className="text-sm font-medium">{product.net} gr</p>
+            <p className="text-sm font-bold capitalize">{product.name}</p>
+            <p className="text-sm font-medium">{product.slug} gr</p>
           </div>
           <div className="flex items-center gap-1">
             <StarIcon size={16} className="fill-yellow-500 text-yellow-500" />
@@ -53,7 +68,7 @@ export default async function Product({ params }: ProductProps) {
             <StarIcon size={16} className="fill-yellow-500 text-yellow-500" />
             <StarIcon size={16} className="fill-yellow-500 text-yellow-500" />
           </div>
-          <p className="text-sm font-medium">{product.complementary}</p>
+          <p className="text-sm font-medium">{product.harmonization}</p>
           <div className="mt-4">
             <form action={addProductToShoppingCart}>
               <ShoppingBagButton />

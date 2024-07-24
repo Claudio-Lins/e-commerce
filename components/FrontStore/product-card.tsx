@@ -13,19 +13,10 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { Price } from "../price";
 import { AspectRatio } from "../ui/aspect-ratio";
+import { ProductType } from "@/@types/product-types";
 
 interface ProductCardProps {
-  product: {
-    id: string;
-    name: string;
-    complementary: string;
-    net: number;
-    price: number;
-    discount: number;
-    images: string[];
-    ingredients: string;
-    category: string;
-  };
+  product: ProductType;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
@@ -43,7 +34,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 <AspectRatio ratio={1}>
                   <Image
                     className="h-full w-full rounded-lg object-cover object-center"
-                    src={image}
+                    src={product.coverUrl}
                     alt={product.name}
                     fill
                   />
@@ -57,12 +48,24 @@ export function ProductCard({ product }: ProductCardProps) {
       </Carousel>
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold leading-5">{product.name}</h2>
-        <Price price={product.price} discount={product.discount} />
+        {product?.productDetails?.map((productDetail) => (
+          <div className="" key={productDetail.id}>
+            <Price
+              price={productDetail.price}
+              discount={productDetail.discount || 0}
+              big={true}
+            />
+          </div>
+        ))}
+        {/* <Price
+          price={product?.productDetails[0]?.price}
+          discount={product?.productDetails[0]?.discount || 0}
+        /> */}
       </div>
       <Separator className="" />
       <div className="space-y-2">
         <p className="line-clamp-2 text-sm font-medium">
-          {product.complementary}
+          {product.harmonization}
         </p>
       </div>
       <div className="flex items-center justify-between gap-4">

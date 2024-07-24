@@ -23,17 +23,70 @@ model User {
 model Product {
   id            String        @id @default(cuid())
   name          String
-  complementary String
-  status        ProductStatus @default(draft)
-  net           Int
-  price         Int
-  discount      Int
+  slug          String        @unique
+  harmonization String        @default("")
+  coverUrl      String
   images        String[]
-  ingredients   String
-  category      String
+  isDestack     Boolean       @default(false)
+  status        ProductStatus @default(draft)
   isFeatured    Boolean       @default(false)
 
   createdAt DateTime @default(now())
+
+  ingredients Ingredient[] @relation("IngredientToProduct")
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+
+  productDetails ProductDetail[]
+}
+
+model ProductDetail {
+  id              String    @id @default(uuid())
+  weight          Int
+  netWeight       Int?
+  validate        DateTime?
+  discount        Int       @default(0)
+  price           Int
+  currency        String    @default("EUR")
+  quantityInStock Int
+  onSales         Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: NoAction)
+
+  @@index([productId], map: "ProductDetail_productId_index")
+}
+
+model Ingredient {
+  id                 String    @id @default(uuid())
+  name               String
+  color              String    @default("#000000")
+  ingredientImageUrl String?
+  createdAt          DateTime  @default(now())
+  products           Product[] @relation("IngredientToProduct")
+}
+
+model Category {
+  id               String    @id @default(uuid())
+  title            String
+  href             String?
+  description      String?
+  categoryImageUrl String?
+  createdAt        DateTime  @default(now())
+  products         Product[]
+}
+
+model Testimonial {
+  id          String   @id @default(uuid())
+  name        String
+  testimonial String
+  email       String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  imageUrl    String?
 }
 
 model Banner {
@@ -61,13 +114,14 @@ enum ProductStatus {
   archived
 }
 
-enum Category {
-  jam
-  utensils
-  packages
-}
+// enum Category {
+//   jam
+//   utensils
+//   packages
+// }
 
 enum UserRole {
   admin
+  manager
   user
 }

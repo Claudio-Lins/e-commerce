@@ -11,15 +11,33 @@ export const navbarLinks = [
   { id: 4, name: "Utensils", href: "/products/utensils" },
 ];
 
-interface NavbarLinksProps {}
+interface NavbarLinksProps {
+  categories: {
+    id: string;
+    title: string;
+    href: string;
+    description: string | null;
+    coverUrl: string | null;
+  }[];
+}
 
-export function NavbarLinks({}: NavbarLinksProps) {
+export function NavbarLinks({ categories }: NavbarLinksProps) {
   const pathName = usePathname();
   return (
     <div
       className={cn("ml-8 hidden items-center justify-center gap-x-4 md:flex")}
     >
-      {navbarLinks.map((link) => (
+      <Link
+        href="/products/all"
+        className={cn(
+          "text-base font-medium text-gray-500 hover:text-zinc-900",
+          pathName === "/products/all" &&
+            "font-bold text-zinc-950 underline underline-offset-8 hover:text-zinc-700",
+        )}
+      >
+        All Products
+      </Link>
+      {categories.map((link) => (
         <Link
           href={link.href}
           key={link.id}
@@ -29,7 +47,7 @@ export function NavbarLinks({}: NavbarLinksProps) {
               "font-bold text-zinc-950 underline underline-offset-8 hover:text-zinc-700",
           )}
         >
-          {link.name}
+          {link.title}
         </Link>
       ))}
     </div>
