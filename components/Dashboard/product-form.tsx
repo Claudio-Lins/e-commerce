@@ -25,7 +25,8 @@ import { CategoryTypes } from "@/@types/category-types";
 import { useTransition } from "react";
 import { productSchema } from "@/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import SelectReact from "react-select";
 import * as z from "zod";
 import { SubmitBottom } from "../submit-bottom";
 import {
@@ -108,7 +109,7 @@ export function ProductForm({ categories, ingredients }: ProductFormProps) {
                     <div className="flex w-full items-center gap-2">
                       {categories.length > 0 && (
                         <Select name="categoryId">
-                          <SelectTrigger>
+                          <SelectTrigger className="text-base text-[#808080]">
                             <SelectValue placeholder="Select Category" />
                           </SelectTrigger>
                           <SelectContent>
@@ -125,21 +126,21 @@ export function ProductForm({ categories, ingredients }: ProductFormProps) {
                     <Label>Ingredients</Label>
                     <div className="flex w-full items-center gap-2">
                       {ingredients.length > 0 && (
-                        <Select name="ingredients" multiple>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Ingredients" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {ingredients.map((ingredient) => (
-                              <SelectItem
-                                key={ingredient.id}
-                                value={ingredient.id}
-                              >
-                                {ingredient.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Controller
+                          name="ingredients"
+                          control={form.control}
+                          render={({ field }) => (
+                            <SelectReact
+                              className="w-full placeholder:text-red-600"
+                              {...field}
+                              isMulti
+                              options={ingredients}
+                              getOptionLabel={(option) => option.name}
+                              getOptionValue={(option) => option.id}
+                              placeholder="Select Ingredients"
+                            />
+                          )}
+                        />
                       )}
                       <IngredientsDialogForm />
                     </div>

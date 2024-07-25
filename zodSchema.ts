@@ -24,8 +24,8 @@ export const categorySchema = z.object({
 export const ingredientSchema = z.object({
   id: z.string().cuid(),
   name: z.string(),
-  color: z.string().default("#000000"),
-  ingredientImageUrl: z.string().nullable().optional(),
+  color: z.string().optional(),
+  ingredientImageUrl: z.string().optional(),
 });
 
 export const bannerSchema = z.object({

@@ -12,6 +12,12 @@ body {
   height: 100dvh;
 }
 
+.css-13cymwt-control {
+  width: 100% !important;
+  border-radius: 0.5rem !important;
+  border-color: #e4e4ea !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
