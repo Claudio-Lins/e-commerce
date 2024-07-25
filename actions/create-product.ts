@@ -13,6 +13,8 @@ export async function createProduct(values: z.infer<typeof productSchema>) {
     throw new Error("Invalid category data");
   }
 
+  console.log(validateFields);
+
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 

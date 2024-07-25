@@ -47,6 +47,5 @@ export const productSchema = z.object({
   categoryId: z.string().nullable().optional(),
   createdAt: z.date().optional(),
   ingredients: z.array(ingredientSchema).optional(),
-  category: categorySchema.nullable().optional(),
   productDetails: z.array(productDetailSchema).optional(),
 });
