@@ -16,7 +16,8 @@ async function getCategories() {
 async function getIngredients() {
   const ingredients = await prisma.ingredient.findMany();
   return ingredients.map((ingredient) => ({
-    ...ingredient,
+    id: ingredient.id,
+    name: ingredient.name,
     color: ingredient.color || "",
     ingredientImageUrl: ingredient.ingredientImageUrl || "",
   }));

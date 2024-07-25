@@ -22,7 +22,7 @@ export const categorySchema = z.object({
 });
 
 export const ingredientSchema = z.object({
-  id: z.string().cuid(),
+  id: z.string().cuid().optional(),
   name: z.string(),
   color: z.string().optional(),
   ingredientImageUrl: z.string().optional(),

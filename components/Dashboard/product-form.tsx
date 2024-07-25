@@ -68,12 +68,11 @@ export function ProductForm({ categories, ingredients }: ProductFormProps) {
   });
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
-    startTransition(() => {
+    startTransition(async () => {
       try {
         console.log("Submitting form...", values);
         // await createProduct(values);
         form.reset();
-        alert("Product created successfully!");
       } catch (error) {
         console.error("Error creating product:", error);
       }
@@ -131,12 +130,12 @@ export function ProductForm({ categories, ingredients }: ProductFormProps) {
                           control={form.control}
                           render={({ field }) => (
                             <SelectReact
-                              className="w-full placeholder:text-red-600"
+                              className={cn("w-full")}
                               {...field}
                               isMulti
                               options={ingredients}
                               getOptionLabel={(option) => option.name}
-                              getOptionValue={(option) => option.id}
+                              getOptionValue={(option) => option.id!}
                               placeholder="Select Ingredients"
                             />
                           )}

@@ -62,7 +62,7 @@ model ProductDetail {
 model Ingredient {
   id                 String    @id @default(uuid())
   name               String
-  color              String    @default("#000000")
+  color              String?
   ingredientImageUrl String?
   createdAt          DateTime  @default(now())
   products           Product[] @relation("IngredientToProduct")

@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { UploadDropzone } from "@/lib/uploadthing";
 import { useState, useTransition } from "react";
@@ -29,11 +30,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { createCategory } from "@/actions/create-category";
 import { Separator } from "../ui/separator";
-import { Textarea } from "../ui/textarea";
 import Image from "next/image";
-import { DialogClose } from "@radix-ui/react-dialog";
+import { createIngredient } from "@/actions/create-ingredient";
 
 export function IngredientsDialogForm() {
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -42,21 +41,19 @@ export function IngredientsDialogForm() {
     resolver: zodResolver(ingredientSchema),
     defaultValues: {
       name: "",
-      color: "",
+      color: "#000000",
       ingredientImageUrl: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof ingredientSchema>) {
-    console.log("Submitting form...", values);
     startTransition(async () => {
       try {
-        // await createCategory(values);
-        setImage(undefined);
+        console.log("Submitting form...", values);
+        await createIngredient(values);
         form.reset();
-        console.log("Category created successfully!");
       } catch (error) {
-        console.error("Error creating category:", error);
+        console.error("Error creating product:", error);
       }
     });
   }
