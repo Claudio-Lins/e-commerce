@@ -125,9 +125,9 @@ export function ProductForm({ categories, ingredients }: ProductFormProps) {
                     <Label>Ingredients</Label>
                     <div className="flex w-full items-center gap-2">
                       {ingredients.length > 0 && (
-                        <Select name="categoryId">
+                        <Select name="ingredients" multiple>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select Category" />
+                            <SelectValue placeholder="Select Ingredients" />
                           </SelectTrigger>
                           <SelectContent>
                             {ingredients.map((ingredient) => (
