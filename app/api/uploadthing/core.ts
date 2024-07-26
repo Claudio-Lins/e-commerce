@@ -1,9 +1,9 @@
-import { prisma } from "@/lib/prisma"
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
-import { createUploadthing, type FileRouter } from "uploadthing/next"
-import { UploadThingError } from "uploadthing/server"
+import { prisma } from "@/lib/prisma";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { UploadThingError } from "uploadthing/server";
 
-const f = createUploadthing()
+const f = createUploadthing();
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -11,54 +11,87 @@ export const ourFileRouter = {
   imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 10 } })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
-      const { getUser } = getKindeServerSession()
-      const user = await getUser()
+      const { getUser } = getKindeServerSession();
+      const user = await getUser();
 
       const userRole = await prisma.user.findUnique({
         where: { id: user?.id },
-      })
+      });
       // If you throw, the user will not be able to upload
       if (!user || userRole?.role !== "admin")
-        throw new UploadThingError("Unauthorized")
+        throw new UploadThingError("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.id }
+      return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId)
+      console.log("Upload complete for userId:", metadata.userId);
 
-      console.log("file url", file.url)
+      console.log("file url", file.url);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId }
+      return { uploadedBy: metadata.userId };
     }),
 
   bannerImageRoute: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
-      const { getUser } = getKindeServerSession()
-      const user = await getUser()
+      const { getUser } = getKindeServerSession();
+      const user = await getUser();
 
       const userRole = await prisma.user.findUnique({
         where: { id: user?.id },
-      })
+      });
       // If you throw, the user will not be able to upload
       if (!user || userRole?.role !== "admin")
-        throw new UploadThingError("Unauthorized")
+        throw new UploadThingError("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.id }
+      return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId)
+      console.log("Upload complete for userId:", metadata.userId);
 
-      console.log("file url", file.url)
+      console.log("file url", file.url);
+      console.log(file.size, file.type, file.key);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId }
+      return { uploadedBy: metadata.userId };
     }),
-} satisfies FileRouter
 
-export type OurFileRouter = typeof ourFileRouter
+  ingredientImageRoute: f({
+    image: {
+      maxFileSize: "1MB",
+      maxFileCount: 1,
+    },
+  })
+    // Set permissions and file types for this FileRoute
+    .middleware(async ({ req }) => {
+      const { getUser } = getKindeServerSession();
+      const user = await getUser();
+
+      const userRole = await prisma.user.findUnique({
+        where: { id: user?.id },
+      });
+      // If you throw, the user will not be able to upload
+      if (!user || userRole?.role !== "admin")
+        throw new UploadThingError("Unauthorized");
+
+      // Whatever is returned here is accessible in onUploadComplete as `metadata`
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      // This code RUNS ON YOUR SERVER after upload
+      console.log("Upload complete for userId:", metadata.userId);
+
+      console.log("file url", file.url);
+      console.log({ metadata });
+
+      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
+      return { uploadedBy: metadata.userId };
+    }),
+} satisfies FileRouter;
+
+export type OurFileRouter = typeof ourFileRouter;

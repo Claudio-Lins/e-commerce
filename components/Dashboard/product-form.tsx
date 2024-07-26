@@ -70,7 +70,7 @@ export function ProductForm({ categories, ingredients }: ProductFormProps) {
   async function onSubmit(values: z.infer<typeof productSchema>) {
     startTransition(async () => {
       try {
-        console.log("Submitting form...", values);
+        console.log("Submitting Product form...", values);
         // await createProduct(values);
         form.reset();
       } catch (error) {

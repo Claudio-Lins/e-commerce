@@ -13,7 +13,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { UploadDropzone } from "@/lib/uploadthing";
+import { UploadDropzone, UploadButton } from "@/lib/uploadthing";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -35,6 +35,7 @@ import Image from "next/image";
 import { createIngredient } from "@/actions/create-ingredient";
 
 export function IngredientsDialogForm() {
+  const [isOpen, setIsOpen] = useState(false);
   const [image, setImage] = useState<string | undefined>(undefined);
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof ingredientSchema>>({
@@ -49,9 +50,11 @@ export function IngredientsDialogForm() {
   async function onSubmit(values: z.infer<typeof ingredientSchema>) {
     startTransition(async () => {
       try {
-        console.log("Submitting form...", values);
+        console.log("Submitting ingredient form...", values);
         await createIngredient(values);
         form.reset();
+        setImage(undefined);
+        setIsOpen(false);
       } catch (error) {
         console.error("Error creating product:", error);
       }
@@ -64,7 +67,7 @@ export function IngredientsDialogForm() {
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">+ Add Ingredient</Button>
       </DialogTrigger>
@@ -87,7 +90,6 @@ export function IngredientsDialogForm() {
                       <Input
                         type="text"
                         placeholder="Name of ingredient"
-                        required
                         {...field}
                         disabled={isPending}
                         autoComplete="off"
@@ -145,8 +147,8 @@ export function IngredientsDialogForm() {
                     <FormItem className="w-full">
                       <FormLabel>Ingredient Image</FormLabel>
                       <FormControl>
-                        <UploadDropzone
-                          endpoint="bannerImageRoute"
+                        <UploadButton
+                          endpoint="ingredientImageRoute"
                           onClientUploadComplete={(res) => {
                             const imageUrl = res[0].url;
                             setImage(imageUrl);
@@ -163,15 +165,15 @@ export function IngredientsDialogForm() {
                 />
               )}
               <DialogFooter className="w-full">
-                <DialogClose asChild>
-                  <Button className="w-full" type="submit" disabled={isPending}>
-                    {isPending ? (
-                      <LoaderIcon className="animate-spin" />
-                    ) : (
-                      "Create"
-                    )}
-                  </Button>
-                </DialogClose>
+                {/* <DialogClose asChild> */}
+                <Button className="w-full" type="submit" disabled={isPending}>
+                  {isPending ? (
+                    <LoaderIcon className="animate-spin" />
+                  ) : (
+                    "Create"
+                  )}
+                </Button>
+                {/* </DialogClose> */}
               </DialogFooter>
             </div>
           </form>
